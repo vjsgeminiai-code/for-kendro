@@ -7,27 +7,54 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         body {
+            margin: 0;
+            height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #ffeef2;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
             overflow: hidden;
         }
 
-        .container {
-            background: white;
-            padding: 3rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        /* Full-screen blurred background image */
+        .bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://i.postimg.cc/dQLBtghB/IMG-4167.png');
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px); /* Adjust blur intensity here */
+            transform: scale(1.1); /* Prevents white edges from blur */
+            z-index: -1;
         }
 
-        h1 { color: #ff4d6d; font-size: 2.5rem; }
-        p { color: #555; font-size: 1.2rem; }
+        /* Overlay to make the background a bit darker so the card pops */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            z-index: -1;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            z-index: 1;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        h1 { color: #ff4d6d; font-size: 2.2rem; margin-bottom: 10px; }
+        p { color: #555; font-size: 1.1rem; }
 
         .buttons {
             margin-top: 2rem;
@@ -41,7 +68,7 @@
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
             font-weight: bold;
         }
 
@@ -49,6 +76,7 @@
             background-color: #ff4d6d;
             color: white;
             margin-right: 10px;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
         }
 
         #noBtn {
@@ -59,8 +87,14 @@
 
         #successMessage {
             display: none;
-            color: #ff4d6d;
-            font-size: 2rem;
+            color: white;
+            z-index: 2;
+        }
+
+        #successMessage h1 {
+            color: white;
+            font-size: 3rem;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
             animation: heartBeat 1.5s infinite;
         }
 
@@ -70,13 +104,24 @@
             100% { transform: scale(1); }
         }
 
-        img { width: 200px; border-radius: 10px; margin-bottom: 20px; }
+        /* The small main image on the card */
+        .card-img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid #ff4d6d;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
 
+    <div class="bg-image"></div>
+    <div class="overlay"></div>
+
     <div class="container" id="mainCard">
-        <img src="https://i.postimg.cc/dQLBtghB/IMG-4167.png" alt="Cute hearts">
+        <img src="https://i.postimg.cc/dQLBtghB/IMG-4167.png" class="card-img" alt="Us">
         <h1>Will you be my Valentine?</h1>
         <p>I promise it'll be the best one yet! ✨</p>
         
@@ -87,13 +132,15 @@
     </div>
 
     <div id="successMessage">
-        <h1>YAY! ❤️ See you on the 14th!</h1>
-        <p>I love you!</p>
+        <h1>YAY! ❤️</h1>
+        <p style="color: white; font-size: 1.5rem;">See you on the 14th! I love you!</p>
     </div>
 
     <script>
+        // Function to make the NO button run away
         function moveButton() {
             const btn = document.getElementById('noBtn');
+            // Calculate random positions within the window
             const x = Math.random() * (window.innerWidth - btn.offsetWidth);
             const y = Math.random() * (window.innerHeight - btn.offsetHeight);
             
@@ -102,28 +149,32 @@
             btn.style.top = y + 'px';
         }
 
+        // Function for when she clicks YES
         function celebrate() {
             document.getElementById('mainCard').style.display = 'none';
             document.getElementById('successMessage').style.display = 'block';
             
+            // Remove blur from background when she says yes!
+            document.querySelector('.bg-image').style.filter = 'none';
+            
             // Confetti effect
-            var duration = 5 * 1000;
+            var duration = 10 * 1000;
             var end = Date.now() + duration;
 
             (function frame() {
               confetti({
-                particleCount: 3,
+                particleCount: 5,
                 angle: 60,
                 spread: 55,
                 origin: { x: 0 },
-                colors: ['#ff4d6d', '#ff758f', '#ffb3c1']
+                colors: ['#ff4d6d', '#ffffff', '#ffb3c1']
               });
               confetti({
-                particleCount: 3,
+                particleCount: 5,
                 angle: 120,
                 spread: 55,
                 origin: { x: 1 },
-                colors: ['#ff4d6d', '#ff758f', '#ffb3c1']
+                colors: ['#ff4d6d', '#ffffff', '#ffb3c1']
               });
 
               if (Date.now() < end) {
