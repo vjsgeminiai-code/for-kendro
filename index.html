@@ -27,74 +27,85 @@
             background-image: url('https://i.postimg.cc/dQLBtghB/IMG-4167.png');
             background-size: cover;
             background-position: center;
-            filter: blur(10px); /* Adjust blur intensity here */
-            transform: scale(1.1); /* Prevents white edges from blur */
+            filter: blur(10px);
+            transform: scale(1.1);
             z-index: -1;
         }
 
-        /* Overlay to make the background a bit darker so the card pops */
         .overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.15);
             z-index: -1;
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
-            padding: 3rem;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             z-index: 1;
             max-width: 400px;
-            width: 90%;
+            width: 85%;
         }
 
-        h1 { color: #ff4d6d; font-size: 2.2rem; margin-bottom: 10px; }
-        p { color: #555; font-size: 1.1rem; }
+        /* Back to the original rectangular style */
+        .card-img {
+            width: 100%;
+            max-width: 250px;
+            height: auto;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 { color: #ff4d6d; font-size: 2rem; margin: 0 0 10px 0; }
+        p { color: #555; font-size: 1.1rem; margin-bottom: 20px; }
 
         .buttons {
-            margin-top: 2rem;
             position: relative;
             height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         button {
             padding: 15px 30px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
             font-weight: bold;
+            transition: transform 0.2s;
         }
 
         #yesBtn {
             background-color: #ff4d6d;
             color: white;
             margin-right: 10px;
-            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+            z-index: 2;
         }
 
         #noBtn {
             background-color: #adb5bd;
             color: white;
             position: absolute;
+            z-index: 2;
         }
 
         #successMessage {
             display: none;
-            color: white;
-            z-index: 2;
+            z-index: 3;
         }
 
         #successMessage h1 {
             color: white;
-            font-size: 3rem;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+            font-size: 3.5rem;
+            text-shadow: 2px 2px 15px rgba(0,0,0,0.4);
             animation: heartBeat 1.5s infinite;
         }
 
@@ -102,16 +113,6 @@
             0% { transform: scale(1); }
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
-        }
-
-        /* The small main image on the card */
-        .card-img {
-            width: 180px;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 5px solid #ff4d6d;
-            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -133,14 +134,12 @@
 
     <div id="successMessage">
         <h1>YAY! ❤️</h1>
-        <p style="color: white; font-size: 1.5rem;">See you on the 14th! I love you!</p>
+        <p style="color: white; font-size: 1.5rem; font-weight: bold;">See you on the 14th!</p>
     </div>
 
     <script>
-        // Function to make the NO button run away
         function moveButton() {
             const btn = document.getElementById('noBtn');
-            // Calculate random positions within the window
             const x = Math.random() * (window.innerWidth - btn.offsetWidth);
             const y = Math.random() * (window.innerHeight - btn.offsetHeight);
             
@@ -149,28 +148,24 @@
             btn.style.top = y + 'px';
         }
 
-        // Function for when she clicks YES
         function celebrate() {
             document.getElementById('mainCard').style.display = 'none';
             document.getElementById('successMessage').style.display = 'block';
-            
-            // Remove blur from background when she says yes!
             document.querySelector('.bg-image').style.filter = 'none';
             
-            // Confetti effect
-            var duration = 10 * 1000;
+            var duration = 15 * 1000;
             var end = Date.now() + duration;
 
             (function frame() {
               confetti({
-                particleCount: 5,
+                particleCount: 7,
                 angle: 60,
                 spread: 55,
                 origin: { x: 0 },
                 colors: ['#ff4d6d', '#ffffff', '#ffb3c1']
               });
               confetti({
-                particleCount: 5,
+                particleCount: 7,
                 angle: 120,
                 spread: 55,
                 origin: { x: 1 },
