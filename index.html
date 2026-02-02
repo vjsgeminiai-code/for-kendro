@@ -142,17 +142,46 @@
         }
 
         function celebrate() {
-            document.getElementById('mainCard').style.display = 'none';
-            document.getElementById('successMessage').style.display = 'block';
-            document.querySelector('.bg-image').style.filter = 'none';
-            
+        // 1. Hide the card and show the success message
+        document.getElementById('mainCard').style.display = 'none';
+        document.getElementById('successMessage').style.display = 'block';
+        
+        // 2. Remove the blur from the background image
+        document.querySelector('.bg-image').style.filter = 'none';
+        
+        // 3. Trigger a massive central burst
+        confetti({
+            particleCount: 150,
+            spread: 100,
+            origin: { y: 0.6 },
+            colors: ['#ff4d6d', '#ffffff', '#ffb3c1']
+        });
+
+        // 4. Trigger continuous side cannons for 8 seconds
+        var duration = 8 * 1000;
+        var end = Date.now() + duration;
+
+        (function frame() {
             confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
+                particleCount: 5,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
                 colors: ['#ff4d6d', '#ffffff', '#ffb3c1']
             });
-        }
+            confetti({
+                particleCount: 5,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: ['#ff4d6d', '#ffffff', '#ffb3c1']
+            });
+
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        }());
+    }
     </script>
 </body>
 </html>
