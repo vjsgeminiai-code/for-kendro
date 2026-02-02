@@ -17,7 +17,6 @@
             overflow: hidden;
         }
 
-        /* Full-screen blurred background image */
         .bg-image {
             position: fixed;
             top: 0;
@@ -44,57 +43,55 @@
 
         .container {
             background: rgba(255, 255, 255, 0.95);
-            padding: 2.5rem;
+            padding: 2rem;
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             z-index: 1;
             max-width: 400px;
-            width: 85%;
+            width: 90%;
         }
 
-        /* Back to the original rectangular style */
         .card-img {
             width: 100%;
-            max-width: 250px;
+            max-width: 280px;
             height: auto;
             border-radius: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
         }
 
-        h1 { color: #ff4d6d; font-size: 2rem; margin: 0 0 10px 0; }
-        p { color: #555; font-size: 1.1rem; margin-bottom: 20px; }
+        h1 { color: #ff4d6d; font-size: 1.8rem; margin: 10px 0; }
+        p { color: #555; font-size: 1rem; margin-bottom: 20px; }
 
+        /* The fix for the overlapping buttons */
         .buttons {
-            position: relative;
-            height: 60px;
             display: flex;
             justify-content: center;
             align-items: center;
+            gap: 20px; /* Space between buttons */
+            margin-top: 10px;
+            min-height: 50px;
         }
 
         button {
-            padding: 15px 30px;
-            font-size: 1.1rem;
+            padding: 12px 25px;
+            font-size: 1rem;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             font-weight: bold;
-            transition: transform 0.2s;
+            transition: all 0.2s ease;
         }
 
         #yesBtn {
             background-color: #ff4d6d;
             color: white;
-            margin-right: 10px;
-            z-index: 2;
         }
 
         #noBtn {
             background-color: #adb5bd;
             color: white;
-            position: absolute;
-            z-index: 2;
+            /* No "absolute" here so it starts in the right place */
+            position: relative; 
         }
 
         #successMessage {
@@ -104,15 +101,8 @@
 
         #successMessage h1 {
             color: white;
-            font-size: 3.5rem;
-            text-shadow: 2px 2px 15px rgba(0,0,0,0.4);
-            animation: heartBeat 1.5s infinite;
-        }
-
-        @keyframes heartBeat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            font-size: 3rem;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
         }
     </style>
 </head>
@@ -134,16 +124,19 @@
 
     <div id="successMessage">
         <h1>YAY! ❤️</h1>
-        <p style="color: white; font-size: 1.5rem; font-weight: bold;">See you on the 14th!</p>
+        <p style="color: white; font-size: 1.2rem;">I love you! See you on the 14th!</p>
     </div>
 
     <script>
         function moveButton() {
             const btn = document.getElementById('noBtn');
+            
+            // Now we switch to fixed only when she hovers
+            btn.style.position = "fixed";
+            
             const x = Math.random() * (window.innerWidth - btn.offsetWidth);
             const y = Math.random() * (window.innerHeight - btn.offsetHeight);
             
-            btn.style.position = "fixed";
             btn.style.left = x + 'px';
             btn.style.top = y + 'px';
         }
@@ -153,29 +146,12 @@
             document.getElementById('successMessage').style.display = 'block';
             document.querySelector('.bg-image').style.filter = 'none';
             
-            var duration = 15 * 1000;
-            var end = Date.now() + duration;
-
-            (function frame() {
-              confetti({
-                particleCount: 7,
-                angle: 60,
-                spread: 55,
-                origin: { x: 0 },
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
                 colors: ['#ff4d6d', '#ffffff', '#ffb3c1']
-              });
-              confetti({
-                particleCount: 7,
-                angle: 120,
-                spread: 55,
-                origin: { x: 1 },
-                colors: ['#ff4d6d', '#ffffff', '#ffb3c1']
-              });
-
-              if (Date.now() < end) {
-                requestAnimationFrame(frame);
-              }
-            }());
+            });
         }
     </script>
 </body>
