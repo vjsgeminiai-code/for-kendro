@@ -81,16 +81,8 @@
             transition: all 0.2s ease;
         }
 
-        #yesBtn {
-            background-color: #ff4d6d;
-            color: white;
-        }
-
-        #noBtn {
-            background-color: #adb5bd;
-            color: white;
-            position: relative; 
-        }
+        #yesBtn { background-color: #ff4d6d; color: white; }
+        #noBtn { background-color: #adb5bd; color: white; position: relative; }
 
         #successMessage {
             display: none;
@@ -99,24 +91,25 @@
 
         #successMessage h1 {
             color: white;
-            font-size: 3rem;
+            font-size: 3.5rem;
             text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
         }
 
-        /* --- NEW TIMER STYLES --- */
-        #timerContainer {
-            margin-top: 25px;
+        .glass-box {
             color: white;
-            font-size: 1.1rem;
-            background: rgba(255, 77, 109, 0.4);
-            padding: 20px;
+            background: rgba(255, 77, 109, 0.5);
+            padding: 15px 20px;
             border-radius: 15px;
             display: inline-block;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.3);
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            margin: 8px 0;
+            width: 85%;
         }
-        .timer-unit { font-weight: bold; color: #fff; font-size: 1.3rem; }
+
+        .timer-unit { font-weight: bold; color: #fff; font-size: 1.15rem; }
     </style>
 </head>
 <body>
@@ -137,10 +130,13 @@
 
     <div id="successMessage">
         <h1>YAY! ❤️</h1>
-        <p style="color: white; font-size: 1.2rem;">See you on the 14th! ❤️</p>
         
-        <div id="timerContainer">
-            <p style="margin: 0 0 10px 0; font-weight: bold; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Time we've spent together:</p>
+        <div class="glass-box">
+            <span style="font-size: 1.2rem; font-weight: bold;">See you on Feb 14th! ❤️</span>
+        </div>
+
+        <div class="glass-box" id="timerContainer">
+            <p style="margin: 0 0 10px 0; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Our Time Together:</p>
             <div id="dateCounter">Calculating...</div>
         </div>
     </div>
@@ -149,28 +145,40 @@
         function moveButton() {
             const btn = document.getElementById('noBtn');
             btn.style.position = "fixed";
-            
             const x = Math.random() * (window.innerWidth - btn.offsetWidth);
             const y = Math.random() * (window.innerHeight - btn.offsetHeight);
-            
             btn.style.left = x + 'px';
             btn.style.top = y + 'px';
         }
 
-        /* --- UPDATED TIMER LOGIC --- */
         function updateTimer() {
-            const startDate = new Date('2024-05-20T00:00:00'); // SET YOUR DATE HERE
+            const startDate = new Date('2024-05-20T00:00:00'); // Anniversary Date
             const now = new Date();
-            const diff = now - startDate;
 
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const secs = Math.floor((diff % (1000 * 60)) / 1000);
+            let years = now.getFullYear() - startDate.getFullYear();
+            let months = now.getMonth() - startDate.getMonth();
+            let days = now.getDate() - startDate.getDate();
+
+            // Adjust for negative days/months
+            if (days < 0) {
+                months--;
+                const lastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+                days += lastMonth.getDate();
+            }
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            const hours = now.getHours();
+            const mins = now.getMinutes();
+            const secs = now.getSeconds();
 
             const timerDisplay = document.getElementById('dateCounter');
             if(timerDisplay) {
                 timerDisplay.innerHTML = 
+                    `<span class="timer-unit">${years}</span>y ` +
+                    `<span class="timer-unit">${months}</span>m ` +
                     `<span class="timer-unit">${days}</span>d ` +
                     `<span class="timer-unit">${hours}</span>h ` +
                     `<span class="timer-unit">${mins}</span>m ` +
@@ -183,11 +191,9 @@
             document.getElementById('successMessage').style.display = 'block';
             document.querySelector('.bg-image').style.filter = 'none';
             
-            // Start the timer once she says yes
             setInterval(updateTimer, 1000);
             updateTimer();
 
-            // Initial Burst
             confetti({
                 particleCount: 150,
                 spread: 70,
@@ -195,7 +201,6 @@
                 colors: ['#ff4d6d', '#ffffff', '#ffb3c1']
             });
 
-            // Side Cannons for extra effect
             var duration = 8 * 1000;
             var end = Date.now() + duration;
 
@@ -214,10 +219,7 @@
                     origin: { x: 1 },
                     colors: ['#ff4d6d', '#ffffff', '#ffb3c1']
                 });
-
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
-                }
+                if (Date.now() < end) { requestAnimationFrame(frame); }
             }());
         }
     </script>
